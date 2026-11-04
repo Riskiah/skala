@@ -1,0 +1,1859 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <style>
+      :root {
+        color-scheme: light;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font:
+          14px -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: #fff;
+        color: #000;
+      }
+      img {
+        max-width: 100%;
+      }
+      [hidden]:not([hidden="until-found" i]) {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <title>Ekspedisi Skala</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Fredoka:wght@500;600;700&display=swap"
+    />
+    <style>
+      /* Layout: panggung 16:9 (1920x1080) yang diskalakan. Header = fase belajar, tengah = slide, bawah = kontrol guru.
+   Kode warna tetap di seluruh media: JG biru, JS oranye, skala hijau. Tema tunggal (terang) sengaja dipilih untuk Smart TV. */
+      :root {
+        --paper: #edf4f1;
+        --grid: #dce8e4;
+        --white: #ffffff;
+        --ink: #12303b;
+        --ink-2: #47616b;
+        --line: #c5d6d2;
+        --sea: #0c2e3b;
+        --gold: #f2a93b;
+        --jp: #1b63ad;
+        --jp-bg: #dcebf8;
+        --js: #b45a00;
+        --js-bg: #fce9cf;
+        --s: #0f7a63;
+        --s-bg: #d5efe6;
+        --bad: #b93a28;
+        --bad-bg: #fadfd9;
+        --f-display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+        --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+      body {
+        background: var(--sea);
+        color: var(--ink);
+        font-family: var(--f-body);
+      }
+      button {
+        font-family: inherit;
+        cursor: pointer;
+      }
+      #viewport {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--sea);
+      }
+      #stage {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 1920px;
+        height: 1080px;
+        transform-origin: center center;
+        background: var(--paper);
+        overflow: hidden;
+      }
+
+      /* ---------- Header ---------- */
+      #top {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 84px;
+        background: var(--sea);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        padding: 0 40px;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font: 600 28px var(--f-display);
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+      #phases {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+      }
+      .ph {
+        font: 600 22px var(--f-display);
+        padding: 6px 16px;
+        border-radius: 999px;
+        color: #8fb4be;
+        border: 2px solid #2c5564;
+        white-space: nowrap;
+      }
+      .ph.done {
+        color: #e6f2f4;
+        border-color: #4c7c8a;
+      }
+      .ph.on {
+        background: var(--gold);
+        color: #2a1a00;
+        border-color: var(--gold);
+      }
+      .hbtn {
+        height: 52px;
+        padding: 0 20px;
+        border-radius: 12px;
+        border: 2px solid #4c7c8a;
+        background: transparent;
+        color: #fff;
+        font: 600 22px var(--f-display);
+        white-space: nowrap;
+      }
+      .hbtn:hover {
+        background: #17475a;
+      }
+
+      /* ---------- Slide area ---------- */
+      #slide {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 84px;
+        bottom: 124px;
+        padding: 30px 72px 26px;
+        overflow: hidden;
+        background-color: var(--paper);
+        background-image:
+          linear-gradient(var(--grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+      .si {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      .h1 {
+        font: 700 58px/1.08 var(--f-display);
+        margin: 0;
+        color: var(--ink);
+      }
+      .sub {
+        font: 400 30px/1.3 var(--f-body);
+        color: var(--ink-2);
+        margin: 6px 0 0;
+      }
+      b.jp,
+      .jp {
+        color: var(--jp);
+      }
+      b.js,
+      .js {
+        color: var(--js);
+      }
+      b.sc,
+      .sc {
+        color: var(--s);
+      }
+      .bad {
+        color: var(--bad);
+      }
+      b {
+        font-weight: 700;
+      }
+
+      /* Pertanyaan guru */
+      .q {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+      .tag {
+        font: 700 21px var(--f-display);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 3px 14px;
+        border-radius: 8px;
+      }
+      .t1 {
+        background: var(--gold);
+        color: #2a1a00;
+      }
+      .t2 {
+        background: var(--jp);
+        color: #fff;
+      }
+      .t3 {
+        background: var(--s);
+        color: #fff;
+      }
+      .qt {
+        font: 400 36px/1.3 var(--f-body);
+      }
+      .given {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .given span {
+        font: 400 32px/1 var(--f-body);
+        background: #fff;
+        border: 3px solid var(--line);
+        border-radius: 12px;
+        padding: 10px 16px;
+      }
+
+      /* Reveal bertahap (dikendalikan guru) */
+      .rv {
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(10px);
+        transition:
+          opacity 0.35s,
+          transform 0.35s,
+          visibility 0s 0.35s;
+      }
+      .rv.on {
+        visibility: visible;
+        opacity: 1;
+        transform: none;
+        transition:
+          opacity 0.35s,
+          transform 0.35s;
+      }
+      .xv.off {
+        visibility: hidden;
+        opacity: 0;
+      }
+      svg .rv {
+        transform: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+        }
+      }
+
+      /* Langkah, catatan, kotak jawaban */
+      .step {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        background: #fff;
+        border: 3px solid var(--line);
+        border-radius: 16px;
+        padding: 12px 20px;
+        font: 400 34px/1.3 var(--f-body);
+        margin-bottom: 12px;
+      }
+      .num {
+        flex: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: var(--ink);
+        color: #fff;
+        font: 600 26px/44px var(--f-display);
+        text-align: center;
+        margin-top: 2px;
+      }
+      .note {
+        font: 400 32px/1.3 var(--f-body);
+        background: var(--s-bg);
+        border-left: 8px solid var(--s);
+        border-radius: 10px;
+        padding: 10px 18px;
+        margin-bottom: 12px;
+      }
+      .ans {
+        font: 400 34px/1.3 var(--f-body);
+        background: var(--s-bg);
+        border: 3px solid var(--s);
+        border-radius: 14px;
+        padding: 12px 20px;
+      }
+      .eq {
+        font: 600 44px/1.1 var(--f-display);
+      }
+      .main2 {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 800px 1fr;
+        gap: 44px;
+        margin-top: 16px;
+        min-height: 0;
+      }
+      .vis {
+        min-width: 0;
+      }
+      .vis svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      .side {
+        min-width: 0;
+      }
+      .panel {
+        background: #fff;
+        border: 3px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 24px;
+      }
+
+      /* Pembuka */
+      .cover {
+        height: 100%;
+        display: grid;
+        grid-template-columns: 1.02fr 0.98fr;
+        gap: 40px;
+        align-items: center;
+      }
+      .cchip {
+        display: inline-block;
+        font: 600 28px var(--f-display);
+        background: var(--gold);
+        color: #2a1a00;
+        padding: 6px 18px;
+        border-radius: 10px;
+      }
+      .cover-h {
+        font: 700 128px/1 var(--f-display);
+        margin: 18px 0 14px;
+        color: var(--ink);
+      }
+      .cover-p {
+        font: 400 38px/1.3 var(--f-body);
+        color: var(--ink-2);
+        margin: 0 0 28px;
+      }
+      .mission {
+        background: var(--sea);
+        color: #fff;
+        border-radius: 20px;
+        padding: 22px 30px;
+        font: 400 34px/1.3 var(--f-body);
+        display: grid;
+        gap: 6px;
+      }
+      .mission b {
+        color: var(--gold);
+        font: 600 30px var(--f-display);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .keys {
+        margin-top: 22px;
+        font: 400 26px/1.4 var(--f-body);
+        color: var(--ink-2);
+      }
+      .cover-r svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+
+      /* Slide 2 */
+      .s2top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 14px;
+      }
+      .pbox {
+        background: #fff;
+        border: 3px solid var(--line);
+        border-radius: 18px;
+        padding: 12px 18px;
+        text-align: center;
+      }
+      .pbox .pl {
+        font: 600 28px var(--f-display);
+        color: var(--ink-2);
+      }
+      .pbox .pd {
+        font: 700 36px var(--f-display);
+        white-space: nowrap;
+      }
+      .pbox svg {
+        display: block;
+        margin: 0 auto;
+        height: auto;
+      }
+      .dnarrow {
+        font: 600 34px var(--f-display);
+        color: var(--ink-2);
+        text-align: center;
+        white-space: nowrap;
+      }
+      .s2bot {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 44px;
+        margin-top: 18px;
+      }
+
+      /* Slide 3 */
+      .chips {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .chips span {
+        font: 400 28px var(--f-body);
+        color: var(--ink-2);
+      }
+      .chip {
+        font: 600 34px var(--f-display);
+        padding: 6px 22px;
+        border-radius: 12px;
+        border: 3px solid var(--s);
+        background: #fff;
+        color: var(--s);
+      }
+      .chip.sel {
+        background: var(--s);
+        color: #fff;
+      }
+      .vrow {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        min-height: 84px;
+      }
+      .blk-cm {
+        width: 42px;
+        height: 42px;
+        background: var(--jp);
+        border-radius: 6px;
+        flex: none;
+      }
+      .segrow {
+        display: flex;
+        gap: 4px;
+      }
+      .seg {
+        height: 58px;
+        background: var(--js);
+        color: #fff;
+        border-radius: 8px;
+        font: 600 28px/58px var(--f-display);
+        text-align: center;
+      }
+      .obar {
+        flex: none;
+        width: 760px;
+        height: 58px;
+        border-radius: 8px;
+        background: var(--js);
+        color: #fff;
+        font: 600 32px/58px var(--f-display);
+        text-align: center;
+      }
+      .vtxt {
+        font: 400 36px/1.2 var(--f-body);
+      }
+      .vlink {
+        font: 600 30px var(--f-display);
+        color: var(--ink-2);
+        margin: 6px 0 6px 62px;
+      }
+
+      /* Slide 4 */
+      .objs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        margin-top: 16px;
+      }
+      .obj {
+        background: #fff;
+        border: 3px solid var(--line);
+        border-radius: 18px;
+        padding: 12px 18px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font: 400 30px/1.25 var(--f-body);
+      }
+      .obj svg {
+        flex: none;
+        width: 150px;
+        height: 105px;
+      }
+      .obj b {
+        display: block;
+        font: 600 34px var(--f-display);
+      }
+      .defn {
+        margin: 18px 0;
+        background: var(--sea);
+        color: #fff;
+        border-radius: 18px;
+        padding: 16px 28px;
+        font: 600 44px/1.2 var(--f-display);
+        text-align: center;
+      }
+      .defn .jp {
+        color: #8ec2f2;
+      }
+      .defn .js {
+        color: #ffc27a;
+      }
+      .defn .sc {
+        color: #7fe0c4;
+      }
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+
+      /* Slide 5 */
+      .tbl {
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        font: 600 46px var(--f-display);
+        width: 100%;
+      }
+      .tbl th {
+        font: 600 32px var(--f-display);
+        color: var(--ink-2);
+        text-align: center;
+        padding: 0 10px;
+      }
+      .tbl td {
+        text-align: center;
+        padding: 10px 16px;
+        background: #fff;
+        border-top: 3px solid var(--line);
+        border-bottom: 3px solid var(--line);
+        height: 74px;
+      }
+      .tbl td:first-child {
+        border-left: 3px solid var(--line);
+        border-radius: 14px 0 0 14px;
+        width: 200px;
+      }
+      .tbl td:last-child {
+        border-right: 3px solid var(--line);
+        border-radius: 0 14px 14px 0;
+        width: 260px;
+      }
+      .tbl td.mid {
+        background: var(--s-bg);
+        color: var(--s);
+        font-size: 36px;
+        width: 200px;
+      }
+      .stack {
+        display: grid;
+      }
+      .stack > * {
+        grid-area: 1/1;
+      }
+      .qmark {
+        color: var(--ink-2);
+      }
+
+      /* Slide 6 */
+      .tri {
+        width: 100%;
+        height: auto;
+      }
+      .fcard {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        background: #fff;
+        border: 3px solid var(--line);
+        border-radius: 16px;
+        padding: 8px 24px;
+        font: 600 42px/1.15 var(--f-display);
+        margin-bottom: 12px;
+      }
+      .fcard .pr {
+        font: 600 34px var(--f-display);
+        color: var(--ink-2);
+      }
+      .fhead {
+        display: flex;
+        justify-content: space-between;
+        font: 600 26px var(--f-display);
+        color: var(--ink-2);
+        padding: 0 24px;
+        margin-bottom: 6px;
+      }
+
+      /* Slide 7 */
+      .ladder {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: 130px 1fr 130px 1fr 130px 1fr 130px 1fr 130px 1fr 130px 1fr 130px;
+        align-items: center;
+        margin-top: 18px;
+        row-gap: 8px;
+      }
+      .unit {
+        height: 76px;
+        border-radius: 14px;
+        background: var(--sea);
+        color: #fff;
+        font: 600 40px/76px var(--f-display);
+        text-align: center;
+      }
+      .unit.hl {
+        background: var(--s);
+      }
+      .sarr {
+        font: 600 26px var(--f-display);
+        color: var(--ink-2);
+        text-align: center;
+      }
+      .brk {
+        border: 4px solid var(--js);
+        border-top: none;
+        border-radius: 0 0 14px 14px;
+        text-align: center;
+        font: 600 28px/1.3 var(--f-display);
+        color: var(--js);
+        padding: 4px 8px 6px;
+        background: var(--js-bg);
+      }
+      .s7bot {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 44px;
+        margin-top: 20px;
+      }
+
+      /* Slide 12 */
+      .egrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 14px;
+        flex: 1;
+        min-height: 0;
+      }
+      .ecard {
+        background: #fff;
+        border: 3px solid var(--line);
+        border-radius: 18px;
+        padding: 14px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 0;
+      }
+      .et {
+        font: 600 36px var(--f-display);
+      }
+      .ewrong {
+        background: var(--bad-bg);
+        border-radius: 10px;
+        padding: 10px 16px;
+        font: 400 34px/1.25 var(--f-body);
+      }
+      .efix {
+        background: var(--s-bg);
+        border-radius: 10px;
+        padding: 10px 16px;
+        font: 400 33px/1.25 var(--f-body);
+      }
+      .lbl {
+        display: inline-block;
+        font: 700 20px var(--f-display);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 1px 10px;
+        border-radius: 6px;
+        margin-right: 10px;
+        vertical-align: 2px;
+        color: #fff;
+      }
+      .lbl.bad {
+        background: var(--bad);
+      }
+      .lbl.good {
+        background: var(--s);
+      }
+
+      /* Refleksi */
+      .rrow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+        align-items: start;
+        margin-top: 14px;
+      }
+
+      /* Rangkuman */
+      .sumgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 44px;
+        margin-top: 18px;
+        flex: 1;
+        min-height: 0;
+      }
+      .res {
+        font: 400 30px/1.3 var(--f-body);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .res li {
+        padding: 6px 0;
+        border-bottom: 2px solid var(--line);
+      }
+      .res li:last-child {
+        border-bottom: none;
+      }
+
+      /* SVG teks */
+      .svt {
+        font-family: var(--f-body);
+        font-weight: 700;
+      }
+
+      /* ---------- Hint & menu ---------- */
+      #hint {
+        position: absolute;
+        left: 72px;
+        right: 72px;
+        bottom: 140px;
+        background: #fff4d6;
+        border: 4px solid var(--gold);
+        border-radius: 18px;
+        padding: 16px 26px;
+        font: 400 34px/1.3 var(--f-body);
+        color: #3a2800;
+        box-shadow: 0 10px 30px rgba(12, 46, 59, 0.28);
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(12px);
+        transition:
+          opacity 0.25s,
+          transform 0.25s,
+          visibility 0s 0.25s;
+        z-index: 5;
+      }
+      #hint.on {
+        visibility: visible;
+        opacity: 1;
+        transform: none;
+        transition:
+          opacity 0.25s,
+          transform 0.25s;
+      }
+      #hint b {
+        font: 700 22px var(--f-display);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        background: var(--gold);
+        color: #2a1a00;
+        padding: 2px 12px;
+        border-radius: 8px;
+        margin-right: 12px;
+        vertical-align: 3px;
+      }
+
+      /* ---------- Bar kontrol ---------- */
+      #bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 124px;
+        background: #fff;
+        border-top: 4px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 48px;
+        gap: 28px;
+        z-index: 6;
+      }
+      #bar .mid {
+        display: flex;
+        gap: 28px;
+      }
+      .cbtn {
+        height: 84px;
+        border-radius: 20px;
+        border: 4px solid var(--ink);
+        background: #fff;
+        color: var(--ink);
+        font: 600 33px var(--f-display);
+        padding: 0 38px;
+        white-space: nowrap;
+        transition: transform 0.1s;
+      }
+      .cbtn:active {
+        transform: scale(0.97);
+      }
+      .c-prev {
+        min-width: 330px;
+      }
+      .c-next {
+        min-width: 330px;
+        background: var(--s);
+        border-color: var(--s);
+        color: #fff;
+      }
+      .c-hint {
+        min-width: 260px;
+        border-color: var(--jp);
+        color: var(--jp);
+      }
+      .c-hint.on {
+        background: var(--jp);
+        color: #fff;
+      }
+      .c-ans {
+        min-width: 470px;
+        background: var(--gold);
+        border-color: var(--gold);
+        color: #2a1a00;
+      }
+      .cbtn:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .cbtn:focus-visible,
+      .hbtn:focus-visible,
+      .chip:focus-visible,
+      #menu button:focus-visible {
+        outline: 5px solid var(--gold);
+        outline-offset: 3px;
+      }
+      .cnt {
+        font: 600 24px var(--f-display);
+        background: #2a1a00;
+        color: var(--gold);
+        padding: 2px 12px;
+        border-radius: 999px;
+        margin-left: 12px;
+        vertical-align: 2px;
+      }
+
+      /* Menu */
+      #menu {
+        position: absolute;
+        inset: 0;
+        background: rgba(12, 46, 59, 0.97);
+        z-index: 20;
+        padding: 44px 72px;
+        color: #fff;
+      }
+      #menu h2 {
+        font: 700 54px var(--f-display);
+        margin: 0 0 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      #menu .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px 20px;
+      }
+      #menu .grid button {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 92px;
+        border-radius: 14px;
+        border: 3px solid #4c7c8a;
+        background: #123f50;
+        color: #fff;
+        font: 400 30px/1.15 var(--f-body);
+        text-align: left;
+        padding: 0 18px;
+      }
+      #menu .grid button.cur {
+        border-color: var(--gold);
+        background: #1d5568;
+      }
+      #menu .mn {
+        flex: none;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--gold);
+        color: #2a1a00;
+        font: 700 28px/52px var(--f-display);
+        text-align: center;
+      }
+      #menu .close {
+        height: 60px;
+        padding: 0 26px;
+        border-radius: 12px;
+        border: 3px solid #4c7c8a;
+        background: transparent;
+        color: #fff;
+        font: 600 28px var(--f-display);
+      }
+    </style>
+
+    <div id="viewport">
+      <div id="stage">
+        <header id="top">
+          <div class="brand">
+            <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+              <circle
+                cx="20"
+                cy="20"
+                r="17"
+                fill="none"
+                stroke="#F2A93B"
+                stroke-width="3"
+              />
+              <path d="M20 5L25 20L20 35L15 20Z" fill="#F2A93B" />
+              <circle cx="20" cy="20" r="3" fill="#0C2E3B" />
+            </svg>
+            Ekspedisi Skala
+          </div>
+          <nav id="phases" aria-label="Tahap pembelajaran"></nav>
+          <button class="hbtn" id="bMenu" title="Daftar slide (M)">
+            Daftar <span id="cnt"></span>
+          </button>
+          <button class="hbtn" id="bFull" title="Layar penuh (F)">
+            Layar Penuh
+          </button>
+        </header>
+        <main id="slide" aria-live="polite"></main>
+        <div id="hint" role="note"></div>
+        <footer id="bar">
+          <button class="cbtn c-prev" id="bPrev">← Sebelumnya</button>
+          <div class="mid">
+            <button class="cbtn c-hint" id="bHint">Petunjuk</button>
+            <button class="cbtn c-ans" id="bAns">Tampilkan Jawaban</button>
+          </div>
+          <button class="cbtn c-next" id="bNext">Berikutnya →</button>
+        </footer>
+        <div id="menu" hidden>
+          <h2>Daftar slide <button class="close" id="mClose">Tutup</button></h2>
+          <div class="grid" id="mGrid"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const C = {
+          jp: "#1B63AD",
+          js: "#B45A00",
+          s: "#0F7A63",
+          ink: "#12303B",
+          land: "#BFDDB4",
+          sea: "#CFE7EC",
+          gold: "#F2A93B",
+          bad: "#B93A28",
+          paper: "#EDF4F1",
+        };
+        const fmt = (n) =>
+          n.toLocaleString("id-ID", { maximumFractionDigits: 2 });
+        const PHASES = [
+          "Situasi nyata",
+          "Makna",
+          "Hubungan",
+          "Satuan",
+          "Contoh",
+          "Latihan",
+          "Refleksi",
+        ];
+
+        /* ---------- helper ---------- */
+        const tag = (c, t) => `<span class="tag t${c}">${t}</span>`;
+        const LBL = {
+          1: "Tebak dulu",
+          2: "Mengapa?",
+          3: "Bagaimana kamu tahu?",
+        };
+        const Q = (c, text) =>
+          `<div class="q">${tag(c, LBL[c])}<div class="qt">${text}</div></div>`;
+        const given = (a) =>
+          `<div class="given">${a.map((x) => `<span>${x}</span>`).join("")}</div>`;
+        const steps = (a) =>
+          a
+            .map(
+              ([r, h], i) =>
+                `<div class="step rv" data-r="${r}"><span class="num">${i + 1}</span><div>${h}</div></div>`,
+            )
+            .join("");
+        const note = (r, h) => `<div class="note rv" data-r="${r}">${h}</div>`;
+        const txt = (
+          x,
+          y,
+          s,
+          col = C.ink,
+          size = 26,
+          anc = "middle",
+          extra = "",
+        ) =>
+          `<text class="svt" x="${x}" y="${y}" text-anchor="${anc}" style="fill:${col};font-size:${size}px" ${extra}>${s}</text>`;
+        const meas = (x1, x2, y, lab, col, size = 34) =>
+          `<g fill="none" stroke="${col}" stroke-width="6" stroke-linecap="round"><path d="M${x1} ${y}H${x2}M${x1} ${y - 14}V${y + 14}M${x2} ${y - 14}V${y + 14}"/></g>${txt((x1 + x2) / 2, y - 22, lab, col, size)}`;
+        const ex = (title, vis, side) =>
+          `<div class="si"><h1 class="h1">${title}</h1><div class="main2"><div class="vis">${vis}</div><div class="side">${side}</div></div></div>`;
+
+        /* ---------- ilustrasi ---------- */
+        const ROUTE = "M40 210 C90 120 160 190 210 120 S320 60 360 50";
+        function mapPanel(w) {
+          return `<svg viewBox="0 0 400 260" width="${w}" aria-hidden="true">
+<rect x="4" y="4" width="392" height="252" rx="18" fill="#E3F0DE" stroke="${C.ink}" stroke-width="5"/>
+<path d="M4 170 C100 140 200 200 396 130" fill="none" stroke="#9CCBD6" stroke-width="16"/>
+<path d="${ROUTE}" fill="none" stroke="${C.bad}" stroke-width="6" stroke-dasharray="3 14" stroke-linecap="round"/>
+<circle cx="40" cy="210" r="13" fill="${C.jp}" stroke="#fff" stroke-width="4"/>
+<path d="M346 36L374 64M374 36L346 64" stroke="${C.bad}" stroke-width="9" stroke-linecap="round"/></svg>`;
+        }
+
+        function rulerMap(cm, final, rr) {
+          const x0 = 70,
+            u = 100,
+            xb = x0 + cm * u,
+            maxcm = 7;
+          let tk = "";
+          for (let i = 0; i <= maxcm; i++) {
+            tk +=
+              `<path d="M${x0 + i * u} 330V360" stroke="${C.ink}" stroke-width="3"/>` +
+              txt(x0 + i * u, 384, i, C.ink, 24);
+          }
+          return `<svg viewBox="0 0 800 430" aria-hidden="true">
+<rect x="8" y="8" width="784" height="300" rx="24" fill="#E3F0DE" stroke="${C.ink}" stroke-width="4"/>
+<path d="M8 250 C200 200 420 290 792 220" fill="none" stroke="#9CCBD6" stroke-width="18"/>
+<path d="M${x0} 150L${xb} 150" stroke="${C.ink}" stroke-width="4" stroke-dasharray="3 12" stroke-linecap="round"/>
+<circle cx="${x0}" cy="150" r="14" fill="${C.jp}" stroke="#fff" stroke-width="4"/><circle cx="${xb}" cy="150" r="14" fill="${C.jp}" stroke="#fff" stroke-width="4"/>
+${txt(x0, 100, "Kota A", C.ink, 28)}${txt(xb, 100, "Kota B", C.ink, 28)}
+${txt((x0 + xb) / 2, 196, "JG = " + cm + " cm", C.jp, 36)}
+<g class="rv" data-r="${rr}">${txt((x0 + xb) / 2, 250, "JS = " + final, C.js, 36)}</g>
+<path d="M${x0} 164V330M${xb} 164V330" stroke="${C.jp}" stroke-width="3" stroke-dasharray="6 8"/>
+<rect x="${x0}" y="330" width="${maxcm * u}" height="64" rx="6" fill="#F6E7B4" stroke="${C.ink}" stroke-width="3"/>
+<rect x="${x0}" y="330" width="${cm * u}" height="64" fill="${C.jp}" opacity=".22"/>${tk}${txt(x0 + maxcm * u + 4, 420, "cm", C.ink, 22, "end")}</svg>`;
+        }
+
+        function carShape(x, y, w, h, sw) {
+          return `<g stroke="${C.ink}" stroke-width="${sw}" stroke-linejoin="round">
+<rect x="${x + w * 0.14}" y="${y - h * 0.045}" width="${w * 0.17}" height="${h * 0.1}" rx="${h * 0.03}" fill="${C.ink}"/><rect x="${x + w * 0.69}" y="${y - h * 0.045}" width="${w * 0.17}" height="${h * 0.1}" rx="${h * 0.03}" fill="${C.ink}"/>
+<rect x="${x + w * 0.14}" y="${y + h * 0.945}" width="${w * 0.17}" height="${h * 0.1}" rx="${h * 0.03}" fill="${C.ink}"/><rect x="${x + w * 0.69}" y="${y + h * 0.945}" width="${w * 0.17}" height="${h * 0.1}" rx="${h * 0.03}" fill="${C.ink}"/>
+<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h * 0.2}" fill="${C.gold}"/>
+<rect x="${x + w * 0.62}" y="${y + h * 0.12}" width="${w * 0.14}" height="${h * 0.76}" rx="${h * 0.05}" fill="#CFE7EC"/>
+<rect x="${x + w * 0.1}" y="${y + h * 0.14}" width="${w * 0.09}" height="${h * 0.72}" rx="${h * 0.05}" fill="#CFE7EC"/>
+<rect x="${x + w * 0.27}" y="${y + h * 0.14}" width="${w * 0.3}" height="${h * 0.72}" rx="${h * 0.08}" fill="#F7C877"/></g>`;
+        }
+
+        function planeShape(x, y, w, fill) {
+          const h = w * 0.45,
+            cy = y + h / 2,
+            sw = Math.max(2, w / 110);
+          return `<g stroke="${C.ink}" stroke-width="${sw}" stroke-linejoin="round" fill="${fill}">
+<polygon points="${x + w * 0.38},${cy - h * 0.07} ${x + w * 0.54},${y} ${x + w * 0.66},${y} ${x + w * 0.6},${cy - h * 0.07}"/>
+<polygon points="${x + w * 0.38},${cy + h * 0.07} ${x + w * 0.54},${y + h} ${x + w * 0.66},${y + h} ${x + w * 0.6},${cy + h * 0.07}"/>
+<polygon points="${x + w * 0.03},${cy - h * 0.07} ${x + w * 0.08},${cy - h * 0.24} ${x + w * 0.16},${cy - h * 0.24} ${x + w * 0.2},${cy - h * 0.07}"/>
+<polygon points="${x + w * 0.03},${cy + h * 0.07} ${x + w * 0.08},${cy + h * 0.24} ${x + w * 0.16},${cy + h * 0.24} ${x + w * 0.2},${cy + h * 0.07}"/>
+<rect x="${x}" y="${cy - h * 0.09}" width="${w}" height="${h * 0.18}" rx="${h * 0.09}"/></g>`;
+        }
+
+        function planSVG(
+          cols,
+          rows,
+          cell,
+          wReal,
+          hReal,
+          area,
+          legend,
+          wUnit,
+          hUnit,
+        ) {
+          const x0 = 40 + (640 - cols * cell) / 2,
+            y0 = 96,
+            W = cols * cell,
+            H = rows * cell,
+            cx = x0 + W / 2,
+            cy = y0 + H / 2;
+          let g = "";
+          for (let i = 0; i <= cols; i++)
+            g += `M${x0 + i * cell} ${y0}V${y0 + H}`;
+          for (let j = 0; j <= rows; j++)
+            g += `M${x0} ${y0 + j * cell}H${x0 + W}`;
+          return `<svg viewBox="0 0 800 540" aria-hidden="true">
+<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="#E3F0DE"/>
+<path d="${g}" stroke="#9DB9A6" stroke-width="2" fill="none"/>
+<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="none" stroke="${C.ink}" stroke-width="5"/>
+${txt(cx - 14, 60, cols + " cm", C.jp, 38, "end")}
+<g class="rv" data-r="1">${txt(cx + 14, 60, "= " + wReal, C.js, 38, "start")}</g>
+${txt(x0 + W + 22, cy - 6, rows + " cm", C.jp, 38, "start")}
+<g class="rv" data-r="2">${txt(x0 + W + 22, cy + 38, "= " + hReal, C.js, 38, "start")}</g>
+<g class="rv" data-r="3"><rect x="${cx - 150}" y="${cy - 48}" width="300" height="96" rx="16" fill="#fff" stroke="${C.js}" stroke-width="4"/>${txt(cx, cy + 16, area, C.js, 50)}</g>
+<g class="rv" data-r="1">${txt(400, y0 + H + 48, legend, C.ink, 28)}</g></svg>`;
+        }
+
+        const iPeta = `<svg viewBox="0 0 140 100" aria-hidden="true"><path d="M10 22L48 12L92 24L130 12V78L92 90L48 78L10 90Z" fill="${C.land}" stroke="${C.ink}" stroke-width="4" stroke-linejoin="round"/><path d="M48 12V78M92 24V90" stroke="${C.ink}" stroke-width="3"/><path d="M22 70C40 40 60 66 78 44S110 30 118 28" fill="none" stroke="${C.bad}" stroke-width="4" stroke-dasharray="2 8" stroke-linecap="round"/></svg>`;
+        const iDenah = `<svg viewBox="0 0 140 100" aria-hidden="true"><rect x="12" y="8" width="116" height="84" fill="#fff" stroke="${C.ink}" stroke-width="5"/><path d="M62 8V58H128M62 58V92M96 58V92" stroke="${C.ink}" stroke-width="4" fill="none"/><path d="M62 28V40M30 8H44" stroke="#fff" stroke-width="6"/></svg>`;
+        const iMini = `<svg viewBox="0 0 140 100" aria-hidden="true"><path d="M30 90V52L70 18L110 52V90Z" fill="#F7C877" stroke="${C.ink}" stroke-width="5" stroke-linejoin="round"/><rect x="58" y="60" width="24" height="30" fill="${C.jp}" stroke="${C.ink}" stroke-width="4"/><rect x="14" y="90" width="112" height="6" rx="3" fill="${C.ink}"/></svg>`;
+
+        /* ---------- slide ---------- */
+        const S = [];
+
+        /* 1 Pembuka */
+        S.push({
+          t: "Pembuka",
+          p: -1,
+          r: 0,
+          hint: "",
+          html: () => `
+<div class="cover"><div>
+<span class="cchip">Matematika · Kelas 7 SMP</span>
+<h1 class="cover-h">Ekspedisi<br>Skala</h1>
+<p class="cover-p">Membaca peta, denah, dan miniatur dengan perbandingan yang tepat.</p>
+<div class="mission"><b>Misi hari ini</b><span>Temukan Gua Harta Karun dengan membaca skala peta secara tepat.</span></div>
+<div class="keys">Kontrol guru: tombol di bawah, atau tombol panah. ← → pindah slide · ↓ jawaban · ↑ petunjuk · M daftar slide</div>
+</div>
+<div class="cover-r"><svg viewBox="0 0 760 640" role="img" aria-label="Peta pulau dengan rute dari pelabuhan ke gua">
+<rect x="8" y="8" width="744" height="624" rx="28" fill="${C.sea}" stroke="${C.ink}" stroke-width="6"/>
+<path d="M8 168H752M8 328H752M8 488H752M198 8V632M388 8V632M578 8V632" stroke="#B5D7DE" stroke-width="2"/>
+<path d="M120 400C100 310 170 230 270 220C310 150 420 140 490 195C580 175 670 240 655 330C700 395 650 485 565 495C505 555 385 565 325 515C230 535 140 490 120 400Z" fill="${C.land}" stroke="${C.ink}" stroke-width="5"/>
+<path d="M200 400C250 340 310 380 360 330S480 270 560 320" fill="none" stroke="${C.bad}" stroke-width="7" stroke-dasharray="3 18" stroke-linecap="round"/>
+<circle cx="200" cy="400" r="15" fill="${C.jp}" stroke="#fff" stroke-width="4"/>${txt(200, 446, "Pelabuhan", C.ink, 28)}
+<path d="M542 302L578 338M578 302L542 338" stroke="${C.bad}" stroke-width="11" stroke-linecap="round"/>${txt(560, 375, "Gua", C.ink, 28)}
+<g transform="translate(655 100)"><circle r="54" fill="#fff" stroke="${C.ink}" stroke-width="5"/><path d="M0 -44L12 0L0 44L-12 0Z" fill="${C.bad}"/><path d="M-44 0L0 -12L44 0L0 12Z" fill="${C.ink}" opacity=".35"/>${txt(0, -62, "U", C.ink, 26)}</g>
+<g stroke="${C.ink}" stroke-width="5"><path d="M50 590H170M50 576V604M170 576V604"/></g>${txt(110, 566, "100 m", C.ink, 24)}${txt(250, 598, "Skala 1:10.000", C.ink, 26, "start")}
+</svg></div></div>`,
+        });
+
+        /* 2 Situasi nyata */
+        S.push({
+          t: "Situasi nyata",
+          p: 0,
+          r: 3,
+          hint: "Ubah 2 km menjadi cm dulu (1 km = 100.000 cm), lalu bagi dengan 20.",
+          html: () => `
+<div class="si"><h1 class="h1">Peta menuju Gua Harta Karun</h1>
+<div class="s2top">
+ <div class="pbox" style="width:520px"><div class="pl">Keadaan sebenarnya</div>${mapPanel(280)}<div class="pd js">Pelabuhan → Gua: 2 km</div></div>
+ <div class="dnarrow">diperkecil<br>dengan perbandingan<br>yang sama →</div>
+ <div class="pbox" style="width:300px"><div class="pl">Peta di kertas</div>${mapPanel(190)}<div class="pd jp">20 cm</div></div>
+</div>
+<div class="s2bot">
+ <div>${Q(2, "Mengapa peta tidak dibuat sebesar kenyataannya?")}<div class="ans rv" data-r="1">Kertas tidak akan muat. Jarak diperkecil, tetapi perbandingannya tetap sama di setiap bagian peta.</div></div>
+ <div>${Q(1, "Jarak sebenarnya 2 km digambar 20 cm. Kira-kira 1 cm di peta mewakili berapa cm?")}<div class="ans rv" data-r="2">2 km = 200.000 cm (1 km = 100.000 cm). Lalu 200.000 ÷ 20 = <b>10.000 cm</b>. Jadi 1 cm di peta mewakili 10.000 cm.</div><div class="note rv" data-r="3" style="margin-top:10px">Perbandingan tetap ini disebut <b>skala</b>. Di sini skalanya 1:10.000.</div></div>
+</div></div>`,
+        });
+
+        /* 3 Makna skala */
+        S.push({
+          t: "Makna skala 1:500",
+          p: 1,
+          r: 2,
+          hint: "Angka kedua memakai satuan yang sama dengan angka pertama, yaitu cm.",
+          html: () => `
+<div class="si"><h1 class="h1">Apa arti skala <span id="s3t">1:500</span>?</h1>
+<div class="panel" style="margin-top:14px">
+ <div class="chips"><span>Coba skala lain:</span><button class="chip" data-n="100">1:100</button><button class="chip" data-n="200">1:200</button><button class="chip sel" data-n="500">1:500</button><button class="chip" data-n="1000">1:1.000</button></div>
+ <div id="s3vis"></div>
+</div>
+<div class="two" style="margin-top:18px">
+ <div>${Q(1, 'Pada skala 1:<span class="s3n">500</span>, 1 cm di gambar mewakili berapa cm sebenarnya?')}<div class="ans rv" data-r="1"><b class="js"><span class="s3n">500</span> cm</b>. Jadi 1 cm pada gambar mewakili <span class="s3n">500</span> cm sebenarnya.</div></div>
+ <div>${Q(2, 'Mengapa 1 cm pada gambar bisa mewakili <span class="s3n">500</span> cm sebenarnya?')}<div class="ans rv" data-r="2">Karena gambar dibuat lebih kecil dengan perbandingan yang tetap. Setiap 1 cm pada gambar sama dengan <span class="s3n">500</span> cm di kenyataan.</div></div>
+</div></div>`,
+          init() {
+            let n = 500;
+            const box = document.getElementById("s3vis");
+            const draw = () => {
+              document.getElementById("s3t").textContent = "1:" + fmt(n);
+              document
+                .querySelectorAll(".s3n")
+                .forEach((e) => (e.textContent = fmt(n)));
+              box.innerHTML = `<div class="vrow"><div class="blk-cm"></div><div class="vtxt"><b class="jp">1 cm</b> pada gambar</div></div>
+    <div class="vlink">mewakili ↓</div>
+    <div class="vrow rv" data-r="1"><div class="obar">${fmt(n)} cm</div><div class="vtxt">sebenarnya</div></div>`;
+              box
+                .querySelectorAll("[data-r]")
+                .forEach((e) =>
+                  e.classList.toggle("on", +e.dataset.r <= window.__lvl()),
+                );
+            };
+            document.querySelectorAll(".chip").forEach(
+              (b) =>
+                (b.onclick = () => {
+                  n = +b.dataset.n;
+                  document
+                    .querySelectorAll(".chip")
+                    .forEach((x) => x.classList.toggle("sel", x === b));
+                  draw();
+                }),
+            );
+            draw();
+          },
+        });
+
+        /* 4 Pengertian */
+        S.push({
+          t: "Pengertian skala",
+          p: 1,
+          r: 2,
+          hint: "Angka pertama selalu untuk gambar. Angka kedua untuk kenyataan.",
+          html: () => `
+<div class="si"><h1 class="h1">Apa itu skala?</h1>
+<div class="objs">
+ <div class="obj">${iPeta}<div><b>Peta</b>jarak kota di kertas</div></div>
+ <div class="obj">${iDenah}<div><b>Denah</b>ruangan atau tanah</div></div>
+ <div class="obj">${iMini}<div><b>Miniatur</b>model benda nyata</div></div>
+</div>
+<div class="defn"><span class="sc">Skala</span> = <span class="jp">jarak gambar (JG)</span> : <span class="js">jarak sebenarnya (JS)</span></div>
+${Q(3, "Pada skala 1:500, angka 1 dan angka 500 menunjukkan apa?")}
+<div class="two">
+ <div class="ans rv" data-r="1" style="background:var(--jp-bg);border-color:var(--jp)"><b class="jp">1</b> → jarak gambar (JG), yaitu 1 cm</div>
+ <div class="ans rv" data-r="2" style="background:var(--js-bg);border-color:var(--js)"><b class="js">500</b> → jarak sebenarnya (JS), yaitu 500 cm</div>
+</div></div>`,
+        });
+
+        /* 5 Temukan hubungan */
+        S.push({
+          t: "Menemukan hubungan",
+          p: 2,
+          r: 3,
+          hint: "Lihat JG = 1, 2, 3. Apa yang terjadi pada JS setiap JG bertambah 1 cm?",
+          html: () => {
+            const row = (a, b, r) =>
+              `<tr><td class="jp">${a}</td><td class="mid rv" data-r="2">× 500 →</td><td class="js">${r ? `<span class="stack"><span class="qmark xv" data-x="1">?</span><span class="rv" data-r="1">${b}</span></span>` : b}</td></tr>`;
+            return `<div class="si"><h1 class="h1">Temukan hubungannya pada skala 1:500</h1>
+<div class="main2" style="grid-template-columns:860px 1fr">
+ <div class="vis"><table class="tbl"><thead><tr><th>JG (cm)</th><th></th><th>JS (cm)</th></tr></thead><tbody>
+ ${row(1, "500")}${row(2, "1.000")}${row(3, "1.500")}${row(4, "2.000", 1)}${row(10, "5.000", 1)}</tbody></table></div>
+ <div class="side">${Q(1, "Berapa JS saat JG = 4 cm dan saat JG = 10 cm? Tebak dulu sebelum dihitung.")}
+ ${Q(3, "Apa pola dari tabel ini?")}
+ <div class="ans rv" data-r="2" style="margin-bottom:12px">Setiap JG dikali 500, jadi <b class="js">JS</b> = <b class="jp">JG</b> × 500.</div>
+ <div class="note rv" data-r="3">Dibalik: <b class="jp">JG</b> = <b class="js">JS</b> ÷ 500. Pada skala 1:n berlaku JS = JG × n.</div></div>
+</div></div>`;
+          },
+        });
+
+        /* 6 Rumus */
+        S.push({
+          t: "Rumus skala",
+          p: 2,
+          r: 2,
+          hint: "Peta lebih kecil daripada kenyataan. Jadi JS harus lebih besar daripada JG. Pada segitiga: tutup yang dicari, lihat sisanya.",
+          html: () => `
+<div class="si"><h1 class="h1">Tiga rumus skala</h1>
+<div class="main2" style="grid-template-columns:560px 1fr">
+ <div class="vis"><svg class="tri" viewBox="0 0 560 500" role="img" aria-label="Segitiga rumus dengan JG di atas, S dan JS di bawah">
+  <polygon points="280,30 30,440 530,440" fill="#fff" stroke="${C.ink}" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M146 250H414M280 250V440" stroke="${C.ink}" stroke-width="5"/>
+  ${txt(280, 170, "JG", C.jp, 64)}${txt(155, 372, "S", C.s, 64)}${txt(405, 372, "JS", C.js, 64)}${txt(280, 484, "Tutup yang dicari, lihat sisanya", C.ink, 26)}</svg></div>
+ <div class="side">${Q(1, "Peta lebih kecil dari kenyataan. Saat mencari JS, JG dikali n atau dibagi n?")}
+  <div class="ans rv" data-r="1" style="margin-bottom:12px">Dikali n. Ukuran sebenarnya selalu lebih besar daripada ukuran di gambar.</div>
+  <div class="fhead rv" data-r="1"><span>Rumus</span><span class="rv" data-r="2">Untuk skala 1:n</span></div>
+  <div class="fcard rv" data-r="1"><span><span class="sc">S</span> = <span class="jp">JG</span> ÷ <span class="js">JS</span></span><span class="pr rv" data-r="2">n = JS ÷ JG</span></div>
+  <div class="fcard rv" data-r="1"><span><span class="jp">JG</span> = <span class="sc">S</span> × <span class="js">JS</span></span><span class="pr rv" data-r="2">JG = JS ÷ n</span></div>
+  <div class="fcard rv" data-r="1"><span><span class="js">JS</span> = <span class="jp">JG</span> ÷ <span class="sc">S</span></span><span class="pr rv" data-r="2">JS = JG × n</span></div>
+ </div></div></div>`,
+        });
+
+        /* 7 Satuan */
+        S.push({
+          t: "Menyamakan satuan",
+          p: 3,
+          r: 2,
+          hint: "Pilih satu satuan, biasanya cm. Dari m ke cm, kalikan 100.",
+          html: () => {
+            const U = ["km", "hm", "dam", "m", "dm", "cm", "mm"];
+            let L = "";
+            U.forEach((u, i) => {
+              L += `<div class="unit ${u === "m" || u === "cm" || u === "km" ? "hl" : ""}" style="grid-column:${i * 2 + 1};grid-row:1">${u}</div>`;
+              if (i < 6)
+                L += `<div class="sarr" style="grid-column:${i * 2 + 2};grid-row:1">×10 →</div>`;
+            });
+            return `<div class="si"><h1 class="h1">Samakan satuan dulu, baru hitung</h1>
+<div class="ladder">${L}
+ <div class="brk" style="grid-column:1/12;grid-row:2">1 km = 100.000 cm (× 100.000)</div>
+ <div class="brk" style="grid-column:7/12;grid-row:3">1 m = 100 cm (× 100)</div></div>
+<div class="s7bot">
+ <div>${Q(1, "Jarak di peta 20 cm, jarak sebenarnya 42 m. Apakah skalanya 20 : 42?")}${Q(2, "Mengapa satuannya harus sama?")}</div>
+ <div>${steps([
+   [
+     1,
+     '<b class="bad">Bukan.</b> 20 dan 42 memakai satuan berbeda (cm dan m).',
+   ],
+   [
+     2,
+     "Skala membandingkan dua ukuran, jadi satuannya harus sama. Ubah dulu: 42 m = 42 × 100 = <b>4.200 cm</b>. Baru dibandingkan: 20 : 4.200.",
+   ],
+ ])}</div>
+</div></div>`;
+          },
+        });
+
+        /* 8 Contoh 1 */
+        S.push({
+          t: "Contoh 1: mencari skala",
+          p: 4,
+          r: 3,
+          hint: "Ubah 42 m ke cm dulu. Setelah itu bagi 20 dan 4.200 dengan 20.",
+          html: () =>
+            ex(
+              "Contoh 1: mencari skala",
+              `<svg viewBox="0 0 800 560" aria-hidden="true">
+<rect x="8" y="8" width="784" height="250" rx="22" fill="#fff" stroke="${C.ink}" stroke-width="4"/>${txt(30, 48, "Di peta", C.ink, 30, "start")}
+<circle cx="130" cy="175" r="13" fill="${C.jp}"/><circle cx="670" cy="175" r="13" fill="${C.jp}"/>${txt(130, 222, "A", C.ink, 28)}${txt(670, 222, "B", C.ink, 28)}${meas(130, 670, 175, "JG = 20 cm", C.jp)}
+<rect x="8" y="292" width="784" height="250" rx="22" fill="#E3F0DE" stroke="${C.ink}" stroke-width="4"/>${txt(30, 332, "Di lapangan", C.ink, 30, "start")}
+<circle cx="130" cy="459" r="13" fill="${C.js}"/><circle cx="670" cy="459" r="13" fill="${C.js}"/>${txt(130, 506, "A", C.ink, 28)}${txt(670, 506, "B", C.ink, 28)}${meas(130, 670, 459, "JS = 42 m", C.js)}
+</svg>`,
+              given([
+                'JG = <b class="jp">20 cm</b>',
+                'JS = <b class="js">42 m</b>',
+                'Skala = <b class="sc">?</b>',
+              ]) +
+                Q(
+                  1,
+                  "Tanpa menghitung rinci, 1 cm di peta kira-kira mewakili berapa meter?",
+                ) +
+                steps([
+                  [1, "Samakan satuan: 42 m = 42 × 100 = <b>4.200 cm</b>"],
+                  [2, "S = JG ÷ JS = 20 ÷ 4.200"],
+                  [
+                    3,
+                    'Sederhanakan (bagi 20): 1 ÷ 210. Skala = <b class="sc">1:210</b>',
+                  ],
+                ]) +
+                note(
+                  3,
+                  "Cek: 1 cm di peta = 210 cm = <b>2,1 m</b>. Cocok dengan tebakan.",
+                ),
+            ),
+        });
+
+        /* 9 Contoh 2 */
+        S.push({
+          t: "Contoh 2: jarak sebenarnya",
+          p: 4,
+          r: 3,
+          hint: "JS = JG × n. Setelah itu ubah cm ke km dengan dibagi 100.000.",
+          html: () =>
+            ex(
+              "Contoh 2: mencari jarak sebenarnya",
+              rulerMap(4, "80 km", 2),
+              given([
+                'Skala = <b class="sc">1:2.000.000</b>',
+                'JG = <b class="jp">4 cm</b>',
+                'JS = <b class="js">? km</b>',
+              ]) +
+                Q(
+                  1,
+                  "Jarak sebenarnya puluhan meter, puluhan km, atau ratusan km?",
+                ) +
+                steps([
+                  [1, "JS = JG × n = 4 × 2.000.000 = <b>8.000.000 cm</b>"],
+                  [
+                    2,
+                    'Ubah ke km: 8.000.000 ÷ 100.000 = <b class="js">80 km</b>',
+                  ],
+                  [
+                    3,
+                    "<b>Mengapa dibagi 100.000?</b> Karena 1 km = 100.000 cm.",
+                  ],
+                ]) +
+                note(
+                  3,
+                  "Bagaimana kamu tahu masuk akal? 1 cm = 20 km, jadi 4 cm = 80 km.",
+                ),
+            ),
+        });
+
+        /* 10 Contoh 3 */
+        S.push({
+          t: "Contoh 3: model mobil",
+          p: 4,
+          r: 3,
+          hint: "Ubah m ke cm. Model lebih kecil dari mobil asli, jadi bagi dengan 250.",
+          html: () =>
+            ex(
+              "Contoh 3: membuat model mobil",
+              `<svg viewBox="0 0 800 500" aria-hidden="true">
+${carShape(60, 80, 480, 300, 5)}${txt(300, 56, "Mobil sebenarnya: 4 m", C.js, 32)}${txt(34, 235, "2,5 m", C.js, 32, "middle", 'transform="rotate(-90 34 235)"')}
+${carShape(560, 250, 160, 100, 4)}${txt(640, 230, "Model", C.jp, 30)}
+<g class="rv" data-r="2">${txt(640, 392, "1,6 cm", C.jp, 32)}</g>
+<g class="rv" data-r="3">${txt(736, 312, "1 cm", C.jp, 30, "start")}</g>
+${txt(400, 470, "Gambar tidak sesuai skala sebenarnya", C.ink, 24)}
+</svg>`,
+              given([
+                'Mobil <b class="js">4 m × 2,5 m</b>',
+                'Skala = <b class="sc">1:250</b>',
+                'Model = <b class="jp">?</b>',
+              ]) +
+                Q(1, "Model lebih dari atau kurang dari 10 cm panjangnya?") +
+                steps([
+                  [
+                    1,
+                    "Samakan satuan: 4 m = <b>400 cm</b>, 2,5 m = <b>250 cm</b>",
+                  ],
+                  [2, 'Panjang model = 400 ÷ 250 = <b class="jp">1,6 cm</b>'],
+                  [
+                    3,
+                    'Lebar model = 250 ÷ 250 = <b class="jp">1 cm</b>. Model: <b>1,6 cm × 1 cm</b>',
+                  ],
+                ]) +
+                note(
+                  3,
+                  "<b>Mengapa dibagi, bukan dikali?</b> Model lebih kecil dari mobil asli.",
+                ),
+            ),
+        });
+
+        /* 11 Contoh 4 */
+        S.push({
+          t: "Contoh 4: denah tanah",
+          p: 4,
+          r: 3,
+          hint: "Hitung panjang dan lebar sendiri-sendiri, lalu kalikan untuk luas.",
+          html: () =>
+            ex(
+              "Contoh 4: denah tanah",
+              planSVG(
+                12,
+                8,
+                48,
+                "60 m",
+                "40 m",
+                "2.400 m²",
+                "1 kotak = 1 cm di denah = 5 m sebenarnya",
+              ),
+              given([
+                'Denah <b class="jp">12 cm × 8 cm</b>',
+                'Skala = <b class="sc">1:500</b>',
+              ]) +
+                Q(1, "Tebak ukuran sebenarnya tanah ini dalam meter.") +
+                steps([
+                  [1, 'Panjang: 12 × 500 = 6.000 cm = <b class="js">60 m</b>'],
+                  [2, 'Lebar: 8 × 500 = 4.000 cm = <b class="js">40 m</b>'],
+                  [3, 'Luas = 60 × 40 = <b class="js">2.400 m²</b>'],
+                ]) +
+                note(
+                  3,
+                  "<b>Mengapa 6.000 cm ditulis 60 m?</b> Karena 6.000 ÷ 100 = 60.",
+                ),
+            ),
+        });
+
+        /* 12 Kesalahan umum */
+        S.push({
+          t: "Kesalahan umum",
+          p: 4,
+          r: 4,
+          hint: "Cek tiga hal: satuan sudah sama? dikali atau dibagi? panjang atau luas?",
+          html: () => {
+            const E = [
+              [
+                "Satuan belum sama",
+                "20 cm dan 42 m, jadi skalanya 20 : 42",
+                "cm dan m berbeda. Ubah 42 m = 4.200 cm, lalu 20 : 4.200 = <b>1 : 210</b>.",
+              ],
+              [
+                "Dikali atau dibagi terbalik",
+                "Skala 1:2.000.000, JG 4 cm, jadi JS = 4 ÷ 2.000.000",
+                "Jarak sebenarnya harus lebih besar, maka dikali: 4 × 2.000.000 = <b>8.000.000 cm</b>.",
+              ],
+              [
+                "Salah membaca 1:500",
+                "Skala 1:500 artinya 1 cm di peta = 500 m",
+                "Satuannya sama: 1 cm = 500 cm = <b>5 m</b>.",
+              ],
+              [
+                "Luas langsung dikali skala",
+                "Luas denah 96 cm², jadi luas asli = 96 × 500",
+                "Skala berlaku untuk panjang dan lebar. 60 m × 40 m = <b>2.400 m²</b>.",
+              ],
+            ];
+            return `<div class="si"><h1 class="h1">Awas, kesalahan yang sering terjadi</h1><p class="sub">${tag(2, "Mengapa?")} &nbsp;Temukan kesalahannya, lalu jelaskan mengapa itu salah.</p>
+<div class="egrid">${E.map((e, i) => `<div class="ecard"><div class="et">${e[0]}</div><div class="ewrong"><span class="lbl bad">Salah</span>${e[1]}</div><div class="efix rv" data-r="${i + 1}"><span class="lbl good">Perbaikan</span>${e[2]}</div></div>`).join("")}</div></div>`;
+          },
+        });
+
+        /* Latihan */
+        const prac = (t, title, hint, vis, giv, qs, st) => ({
+          t,
+          p: 5,
+          r: 3,
+          hint,
+          html: () => ex(title, vis, giv + qs + steps(st)),
+        });
+
+        S.push(
+          prac(
+            "Latihan 1",
+            "Latihan 1: jarak antarkota",
+            "JS = JG × n, lalu ubah cm ke km (÷ 100.000).",
+            rulerMap(6, "90 km", 2),
+            given([
+              'Skala = <b class="sc">1:1.500.000</b>',
+              'JG = <b class="jp">6 cm</b>',
+              'JS = <b class="js">? km</b>',
+            ]),
+            Q(
+              3,
+              "Berapa jarak sebenarnya Kota A ke Kota B? Kerjakan di buku, lalu cek.",
+            ),
+            [
+              [1, "JS = 6 × 1.500.000 = <b>9.000.000 cm</b>"],
+              [2, '9.000.000 ÷ 100.000 = <b class="js">90 km</b>'],
+              [3, "Cek: 1 cm = 15 km, jadi 6 cm = 90 km. Masuk akal."],
+            ],
+          ),
+        );
+
+        S.push(
+          prac(
+            "Latihan 2",
+            "Latihan 2: denah lapangan",
+            "Ubah 90 m ke cm. Denah lebih kecil, jadi dibagi 600.",
+            `<svg viewBox="0 0 800 520" aria-hidden="true">
+<rect x="70" y="40" width="660" height="260" rx="10" fill="#9BD08A" stroke="${C.ink}" stroke-width="5"/><path d="M400 40V300" stroke="#fff" stroke-width="5"/><circle cx="400" cy="170" r="42" fill="none" stroke="#fff" stroke-width="5"/><rect x="70" y="105" width="80" height="130" fill="none" stroke="#fff" stroke-width="5"/><rect x="650" y="105" width="80" height="130" fill="none" stroke="#fff" stroke-width="5"/>
+${meas(70, 730, 350, "Panjang lapangan = 90 m", C.js, 32)}
+<rect x="270" y="410" width="260" height="70" rx="6" fill="#fff" stroke="${C.ink}" stroke-width="4" stroke-dasharray="10 8"/>${txt(400, 458, "denah: ? cm", C.jp, 34)}</svg>`,
+            given([
+              'JS = <b class="js">90 m</b>',
+              'Skala = <b class="sc">1:600</b>',
+              'JG = <b class="jp">? cm</b>',
+            ]),
+            Q(
+              1,
+              "Panjang lapangan pada denah lebih dari atau kurang dari 90 cm?",
+            ),
+            [
+              [1, "Samakan satuan: 90 m = <b>9.000 cm</b>"],
+              [2, 'JG = JS ÷ n = 9.000 ÷ 600 = <b class="jp">15 cm</b>'],
+              [
+                3,
+                "Cek: denah lebih kecil dari kenyataan, dan 1 cm × 600 = 6 m, 15 cm × 6 m = 90 m. Masuk akal.",
+              ],
+            ],
+          ),
+        );
+
+        S.push(
+          prac(
+            "Latihan 3",
+            "Latihan 3: model pesawat",
+            "Ubah 15 m ke cm, lalu S = JG ÷ JS dan sederhanakan.",
+            `<svg viewBox="0 0 800 520" aria-hidden="true">${planeShape(100, 30, 600, "#CFE0EA")}${meas(100, 700, 320, "Pesawat asli: 15 m", C.js, 32)}
+${planeShape(100, 380, 180, "#CFE0EA")}${txt(300, 430, "Model: 30 cm", C.jp, 34, "start")}${txt(300, 470, "Gambar tidak sesuai skala", C.ink, 24, "start")}</svg>`,
+            given([
+              'JG = <b class="jp">30 cm</b>',
+              'JS = <b class="js">15 m</b>',
+              'Skala = <b class="sc">?</b>',
+            ]),
+            Q(
+              3,
+              "Berapa skala model pesawat ini? Bagaimana kamu tahu jawabanmu tepat?",
+            ),
+            [
+              [1, "Samakan satuan: 15 m = <b>1.500 cm</b>"],
+              [2, "S = JG ÷ JS = 30 ÷ 1.500 = 1 ÷ 50"],
+              [
+                3,
+                'Skala = <b class="sc">1:50</b>. Cek: 30 cm × 50 = 1.500 cm = 15 m.',
+              ],
+            ],
+          ),
+        );
+
+        S.push(
+          prac(
+            "Latihan 4 (tantangan)",
+            "Latihan 4 (tantangan): ruang kelas",
+            "Panjang dan lebar dikali 200 dulu, ubah ke m, lalu hitung luas.",
+            planSVG(
+              4,
+              3,
+              90,
+              "8 m",
+              "6 m",
+              "48 m²",
+              "1 kotak = 1 cm di denah = 2 m sebenarnya",
+            ),
+            given([
+              'Denah <b class="jp">4 cm × 3 cm</b>',
+              'Skala = <b class="sc">1:200</b>',
+            ]),
+            Q(
+              3,
+              "Berapa ukuran dan luas ruang kelas sebenarnya? Apakah ukuran itu masuk akal?",
+            ),
+            [
+              [1, 'Panjang: 4 × 200 = 800 cm = <b class="js">8 m</b>'],
+              [2, 'Lebar: 3 × 200 = 600 cm = <b class="js">6 m</b>'],
+              [
+                3,
+                'Luas = 8 × 6 = <b class="js">48 m²</b>. Masuk akal untuk ruang kelas.',
+              ],
+            ],
+          ),
+        );
+
+        /* 17 Refleksi */
+        S.push({
+          t: "Refleksi",
+          p: 6,
+          r: 3,
+          hint: "",
+          html: () => `
+<div class="si"><h1 class="h1">Refleksi: apa yang kamu pahami?</h1>
+<div class="rrow"><div>${Q(1, "Dua peta memakai kertas sama: peta A skala 1:5.000, peta B skala 1:50.000. Peta mana yang memuat daerah lebih luas?")}</div>
+ <div class="ans rv" data-r="1"><b>Peta B.</b> 1 cm di peta B mewakili 500 m, sedangkan di peta A hanya 50 m. Daerahnya lebih luas, tetapi detailnya lebih sedikit.</div></div>
+<div class="rrow"><div>${Q(3, "Kapan JG dikali n dan kapan dibagi n?")}</div>
+ <div class="ans rv" data-r="2">Mencari ukuran sebenarnya (lebih besar): <b>kali n</b>. Mencari ukuran pada gambar (lebih kecil): <b>bagi n</b>.</div></div>
+<div class="rrow"><div>${Q(2, "Mengapa satuan harus disamakan sebelum menghitung?")}</div>
+ <div class="ans rv" data-r="3">Skala membandingkan dua ukuran. Kalau satuannya beda, seperti 20 cm dan 42 m, angkanya tidak bisa dibandingkan.</div></div>
+<p class="sub" style="margin-top:14px">Tuliskan satu bagian yang masih kamu tanyakan.</p></div>`,
+        });
+
+        /* 18 Rangkuman */
+        S.push({
+          t: "Rangkuman",
+          p: 6,
+          r: 0,
+          hint: "",
+          html: () => `
+<div class="si"><h1 class="h1">Rangkuman</h1>
+<div class="sumgrid"><div>
+ <div class="defn" style="margin:0 0 14px;font-size:40px"><span class="sc">S</span> = <span class="jp">JG</span> : <span class="js">JS</span> = 1 : n</div>
+ <div class="step"><span class="num">1</span><div>Tulis yang diketahui: skala, JG, atau JS.</div></div>
+ <div class="step"><span class="num">2</span><div>Samakan satuan, biasanya ke cm.</div></div>
+ <div class="step"><span class="num">3</span><div>Pilih rumus: <b class="js">JS</b> = <b class="jp">JG</b> × n · <b class="jp">JG</b> = <b class="js">JS</b> ÷ n · n = <b class="js">JS</b> ÷ <b class="jp">JG</b></div></div>
+ <div class="step"><span class="num">4</span><div>Ubah satuan hasil, lalu cek masuk akal.</div></div></div>
+ <div class="panel"><div class="tag t3" style="display:inline-block;margin-bottom:10px">Hasil contoh kita</div>
+ <ul class="res"><li>20 cm di peta, 42 m sebenarnya → skala <b class="sc">1:210</b></li>
+ <li>1:2.000.000, JG 4 cm → JS <b class="js">80 km</b></li>
+ <li>Mobil 4 m × 2,5 m, 1:250 → model <b class="jp">1,6 cm × 1 cm</b></li>
+ <li>Denah 12 × 8 cm, 1:500 → <b class="js">60 m × 40 m</b>, luas <b class="js">2.400 m²</b></li></ul></div>
+</div></div>`,
+        });
+
+        /* ---------- mesin slide ---------- */
+        const $ = (id) => document.getElementById(id);
+        const stage = $("stage"),
+          slideEl = $("slide"),
+          hintEl = $("hint");
+        let cur = 0,
+          lvl = 0,
+          hintOn = false;
+        window.__lvl = () => lvl;
+
+        function fit() {
+          const vp = $("viewport");
+          const k = Math.min(vp.clientWidth / 1920, vp.clientHeight / 1080);
+          stage.style.transform = `translate(-50%,-50%) scale(${k})`;
+        }
+        function applyLvl() {
+          slideEl
+            .querySelectorAll("[data-r]")
+            .forEach((e) => e.classList.toggle("on", +e.dataset.r <= lvl));
+          slideEl
+            .querySelectorAll("[data-x]")
+            .forEach((e) => e.classList.toggle("off", +e.dataset.x <= lvl));
+        }
+        function ui() {
+          const s = S[cur];
+          $("cnt").textContent = cur + 1 + " / " + S.length;
+          $("phases").innerHTML = PHASES.map(
+            (p, i) =>
+              `<span class="ph ${s.p === i ? "on" : i < s.p ? "done" : ""}">${p}</span>`,
+          ).join("");
+          $("bPrev").disabled = cur === 0;
+          $("bNext").disabled = cur === S.length - 1;
+          const a = $("bAns");
+          a.disabled = s.r === 0;
+          a.innerHTML =
+            lvl >= s.r && s.r > 0
+              ? "Sembunyikan Jawaban"
+              : "Tampilkan Jawaban" +
+                (s.r > 1 && lvl > 0
+                  ? `<span class="cnt">${lvl}/${s.r}</span>`
+                  : "");
+          const h = $("bHint");
+          h.disabled = !s.hint;
+          h.classList.toggle("on", hintOn);
+          h.textContent = hintOn ? "Tutup Petunjuk" : "Petunjuk";
+          hintEl.innerHTML = `<b>Petunjuk</b>${s.hint}`;
+          hintEl.classList.toggle("on", hintOn && !!s.hint);
+        }
+        function render() {
+          const s = S[cur];
+          slideEl.innerHTML = s.html();
+          if (s.init) s.init();
+          applyLvl();
+          ui();
+          try {
+            history.replaceState(null, "", "#s" + (cur + 1));
+          } catch (e) {}
+        }
+        function go(i) {
+          if (i < 0 || i >= S.length) return;
+          cur = i;
+          lvl = 0;
+          hintOn = false;
+          render();
+        }
+        function answer() {
+          const s = S[cur];
+          if (!s.r) return;
+          lvl = lvl >= s.r ? 0 : lvl + 1;
+          applyLvl();
+          ui();
+        }
+        function hintToggle() {
+          if (!S[cur].hint) return;
+          hintOn = !hintOn;
+          ui();
+        }
+        function menuOpen(o) {
+          const m = $("menu");
+          m.hidden = !o;
+          if (o) {
+            $("mGrid").innerHTML = S.map(
+              (s, i) =>
+                `<button data-i="${i}" class="${i === cur ? "cur" : ""}"><span class="mn">${i + 1}</span>${s.t}</button>`,
+            ).join("");
+            $("mGrid")
+              .querySelectorAll("button")
+              .forEach(
+                (b) =>
+                  (b.onclick = () => {
+                    menuOpen(false);
+                    go(+b.dataset.i);
+                  }),
+              );
+          }
+        }
+        function full() {
+          try {
+            const el = document.documentElement;
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              const p = el.requestFullscreen && el.requestFullscreen();
+              if (p && p.catch) p.catch(() => {});
+            }
+          } catch (e) {}
+        }
+
+        $("bPrev").onclick = () => go(cur - 1);
+        $("bNext").onclick = () => go(cur + 1);
+        $("bAns").onclick = answer;
+        $("bHint").onclick = hintToggle;
+        $("bMenu").onclick = () => menuOpen(true);
+        $("mClose").onclick = () => menuOpen(false);
+        $("bFull").onclick = full;
+        document.addEventListener("keydown", (e) => {
+          if (e.ctrlKey || e.metaKey || e.altKey) return;
+          const open = !$("menu").hidden;
+          if (e.key === "Escape") {
+            if (open) menuOpen(false);
+            else if (hintOn) hintToggle();
+            return;
+          }
+          if (open) return;
+          const k = e.key;
+          if (k === "ArrowRight" || k === "PageDown") {
+            go(cur + 1);
+            e.preventDefault();
+          } else if (k === "ArrowLeft" || k === "PageUp") {
+            go(cur - 1);
+            e.preventDefault();
+          } else if (k === "ArrowDown" || k === "j" || k === "J") {
+            answer();
+            e.preventDefault();
+          } else if (k === "ArrowUp" || k === "h" || k === "H") {
+            hintToggle();
+            e.preventDefault();
+          } else if (k === "m" || k === "M") {
+            menuOpen(true);
+          } else if (k === "f" || k === "F") {
+            full();
+          } else if (k === "Home") {
+            go(0);
+          } else if (k === "End") {
+            go(S.length - 1);
+          }
+        });
+        window.addEventListener("resize", fit);
+        window.addEventListener("hashchange", () => {
+          const m = /^#s(\d+)$/.exec(location.hash);
+          if (m) {
+            const i = +m[1] - 1;
+            if (i !== cur) go(i);
+          }
+        });
+        fit();
+        const m0 = /^#s(\d+)$/.exec(location.hash);
+        cur = m0 ? Math.min(S.length - 1, Math.max(0, +m0[1] - 1)) : 0;
+        render();
+        window.__S = S;
+        window.__go = go;
+        window.__ans = (n) => {
+          lvl = n;
+          applyLvl();
+          ui();
+        };
+      })();
+    </script>
+  </body>
+</html>
